@@ -1,4 +1,4 @@
 import './main.scss';
-import { App } from './app';
+import { App } from './core/app';
 
 const app = new App();

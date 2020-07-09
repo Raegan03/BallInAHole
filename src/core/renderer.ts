@@ -1,4 +1,5 @@
-import { Entity } from "./entity";
+import { Entity } from "../entities/entity";
+import { Vector2 } from "../math/vector2";
 
 export class Renderer{
 
@@ -8,6 +9,10 @@ export class Renderer{
     constructor(){
         this.ResizeRenderer();
         window.addEventListener('resize', () => this.ResizeRenderer());
+    }
+
+    GetCanvasSize(): Vector2{
+        return new Vector2(this.rendererCanvas.width, this.rendererCanvas.height);
     }
 
     RenderEntites(entites: Entity[]){

@@ -1,21 +1,22 @@
 import { Renderer } from "./renderer";
-import { Circle } from "./circle";
-import { Vector2 } from "./vector2";
+import { Circle } from "../entities/circle";
+import { Vector2 } from "../math/vector2";
+import { EntitesManager } from "./entitesManager";
 
 export class App {
 
     readonly renderer: Renderer;
-
-    testCircle: Circle;
+    readonly entitiesManager: EntitesManager;
 
     constructor() {
         this.renderer = new Renderer();
 
-        this.testCircle = new Circle(0, new Vector2(this.renderer.rendererCanvas.width / 2, this.renderer.rendererCanvas.height / 2), 20, "#333");
+        this.entitiesManager = new EntitesManager(20);
         this.StartGame();
     }
 
     StartGame(){
+        this.entitiesManager.SpawnEntites(this.renderer.GetCanvasSize());
         window.requestAnimationFrame((t) => this.Update(t));
     }
 
@@ -24,7 +25,7 @@ export class App {
         this.renderer.ClearRenderer();
         //Logic
 
-        this.renderer.RenderEntites([this.testCircle]);
+        this.renderer.RenderEntites(this.entitiesManager.allEntites);
 
         console.log(timestamp);
         window.requestAnimationFrame(this.Update);
