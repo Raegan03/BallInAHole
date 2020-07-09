@@ -2,14 +2,17 @@ import { Entity } from "../entities/entity";
 import { Circle } from "../entities/circle";
 import { Vector2 } from "../math/vector2";
 import { Physic } from "../math/physic";
+import { PlayerCircle } from "../entities/playerCircle";
 
 export class EntitesManager{
 
-    readonly playerRadius = 30;
-    readonly wrongRadius = 20;
+    readonly playerRadius = 20;
+    readonly wrongRadius = 15;
     readonly correctRadius = 30;
 
-    playerEntity: Entity;
+    readonly playerSpeed = 0.001;
+
+    playerEntity: PlayerCircle;
     correctEntity: Entity;
 
     wrongEntites: Entity[];
@@ -24,8 +27,8 @@ export class EntitesManager{
     }
 
     SpawnEntites(canvasSize: Vector2){
-        this.playerEntity = new Circle(0, new Vector2(canvasSize.x / 2, canvasSize.y / 2), 
-        this.playerRadius, 'Player');
+        this.playerEntity = new PlayerCircle(0, new Vector2(canvasSize.x / 2, canvasSize.y / 2), 
+        this.playerRadius, this.playerSpeed);
 
         this.allEntites.push(this.playerEntity)
 
@@ -48,5 +51,26 @@ export class EntitesManager{
             this.wrongEntites.push(entity);
             this.allEntites.push(entity)
         }
+    }
+
+    DestroyEntities(){
+        this.allEntites = [];
+        this.wrongEntites = [];
+
+        this.playerEntity = null;
+        this.correctEntity = null;
+    }
+
+    CheckCorrectCollision(): boolean{
+        return Physic.CheckCircleCollisionWithCircle(this.playerEntity, this.correctEntity as Circle);
+    }
+
+    CheckWrongCollision(): boolean{
+        for (let i = 0; i < this.wrongEntites.length; i++){
+            if(Physic.CheckCircleCollisionWithCircle(this.playerEntity, this.wrongEntites[i] as Circle))
+                return true;
+        }
+
+        return false;
     }
 }
